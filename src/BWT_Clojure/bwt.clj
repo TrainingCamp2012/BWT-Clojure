@@ -6,6 +6,9 @@
 (defn bwt-encode [s]
   (map last (sort (map #(apply str %) (take (count s) (partition (count s) 1 (cycle s)))))))
 
+(defn sa [s]
+  (sort #(compare (first %1) (first %2)) (map list s (iterate inc 0))))
+
 (defn bwt-decode [l]
   (let [sl (sort #(compare (first %1) (first %2)) (map list l (iterate inc 0)))]
     (loop [result [] n 0]
