@@ -1,4 +1,5 @@
-(use '[clojure.contrib.str-utils :only (re-gsub)])
+(ns BWT-Clojure.bwt
+  (:use [clojure.contrib.str-utils :only (re-gsub)]))
 
 (defn text-prep [s]
   (str (re-gsub #" " "_" s) "$"))
