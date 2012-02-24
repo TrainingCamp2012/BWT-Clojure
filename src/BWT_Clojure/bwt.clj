@@ -12,17 +12,17 @@
 (defn bwt-decode [l]
   (let [sl (sort #(compare (first %1) (first %2)) (map list l (iterate inc 0)))]
     (loop [result [] n 0]
-                 (if (zero? (last (nth sl n)))
-                   (conj result (first (nth sl n)))
-                   (recur (conj result (first (nth sl n))) (last (nth sl n)))))))
+      (if (zero? (last (nth sl n)))
+        (conj result (first (nth sl n)))
+        (recur (conj result (first (nth sl n))) (last (nth sl n)))))))
 
 (defn bwt-decode [l n]
   (let [sl (sort #(compare (first %1) (first %2)) (map list l (iterate inc 0)))
         index n]
     (loop [result [] n index]
-                 (if (zero? (last (nth sl n)))
-                   (conj result (first (nth sl n)))
-                   (recur (conj result (first (nth sl n))) (last (nth sl n)))))))
+      (if (zero? (last (nth sl n)))
+        (conj result (first (nth sl n)))
+        (recur (conj result (first (nth sl n))) (last (nth sl n)))))))
 
 (defn bwt-find-index [bwt query]
   (map last (first (let [arr (sa bwt)]
@@ -38,8 +38,8 @@
                                   (conj result (filter #(= (first q) (first %)) f))))))))))
 
 (defn bwt-search [bwt query]
-  (map #(- (count text) (if (= (inc (count text)) (count %)) 0 (count %)) (count query))
-     (map #(bwt-decode bwt %) (bwt-find-index bwt query))))
+  (map #(- (dec (count bwt)) (if (= (count bwt) (count %)) 0 (count %)) (count query))
+       (map #(bwt-decode bwt %) (bwt-find-index bwt query))))
 
 
 ;; (def text "abracadabra")
@@ -55,4 +55,3 @@
 
 ;; (bwt-search (bwt-encode (text-prep text)) "ra")
 ;; (9 2)
-
