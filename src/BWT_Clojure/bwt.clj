@@ -35,7 +35,11 @@
 (defn bwt-search [bwt query]
   (let [q (re-gsub #" " "_" (lower-case query))]
     (map #(- (dec (count bwt)) (if (= (count bwt) (count %)) 0 (count %)) (count q))
+<<<<<<< HEAD
          (map #(bwt-decode bwt %) (bwt-find-index bwt q)))))
+=======
+       (map #(bwt-decode bwt %) (bwt-find-index bwt q)))))
+>>>>>>> 4dd2f41ce096de39e60f4a5314bb01073e29a028
 
 
 ;;  (def text "abracadabr a")
