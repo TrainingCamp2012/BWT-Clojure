@@ -1,8 +1,9 @@
 (ns BWT-Clojure.bwt
-  (:use [clojure.contrib.str-utils :only (re-gsub)]))
+  (:use [clojure.contrib.str-utils :only (re-gsub)])
+  (:use [clojure.contrib.string :only (lower-case)]))
 
 (defn text-prep [s]
-  (str (re-gsub #" " "_" s) "$"))
+  (str (re-gsub #" " "_" (lower-case s)) "$"))
 
 (defn bwt-encode [s]
   (map last (sort (map #(apply str %) (take (count s) (partition (count s) 1 (cycle s)))))))
@@ -39,8 +40,9 @@
                                   (conj result (filter #(= (first q) (first %)) f))))))))))
 
 (defn bwt-search [bwt query]
-  (map #(- (dec (count bwt)) (if (= (count bwt) (count %)) 0 (count %)) (count query))
-       (map #(bwt-decode bwt %) (bwt-find-index bwt query))))
+  (let [q (re-gsub #" " "_" (lower-case query))]
+    (map #(- (dec (count bwt)) (if (= (count bwt) (count %)) 0 (count %)) (count q))
+       (map #(bwt-decode bwt %) (bwt-find-index bwt q)))))
 
 
 ;; (def text "abracadabra")
