@@ -7,11 +7,8 @@
 
 (defn bwt-encode [s]
   (map last (sort (map #(apply str %) (take (count s) (partition (count s) 1 (cycle s)))))))
-(defn bwt-encode-p [s]
-  (pmap last (sort (pmap #(apply str %) (take (count s) (partition (count s) 1 (cycle s)))))))
-
-(defn sa [s]
-  (sort #(compare (first %1) (first %2)) (map list s (iterate inc 0))))
+;; (defn bwt-encode-p [s]
+;;   (pmap last (sort (pmap #(apply str %) (take (count s) (partition (count s) 1 (cycle s)))))))
 
 (defn bwt-decode [l n]
   (let [sl (sort #(compare (first %1) (first %2)) (map list l (iterate inc 0)))
@@ -20,6 +17,9 @@
       (if (zero? (last (nth sl n)))
         (conj result (first (nth sl n)))
                 (recur (conj result (first (nth sl n))) (last (nth sl n)))))))
+
+(defn sa [s]
+  (sort #(compare (first %1) (first %2)) (map list s (iterate inc 0))))
 
 ;; LF-mapping (maybe...)
 ;; need huge heap size(insufficient memory)
@@ -40,18 +40,3 @@
   (let [q (re-gsub #" " "_" (lower-case query))]
     (map #(- (dec (count bwt)) (if (= (count bwt) (count %)) 0 (count %)) (count q))
          (map #(bwt-decode bwt %) (bwt-find-index bwt q)))))
-
-;;  (def text "abracadabr a")
-
-;; (bwt-decode (bwt-encode (text-prep text)) 0)
-;; [\$ \a \b \r \a \c \a \d \a \b \r \a]
-
-;; (sa (bwt-encode (text-prep text)))
-;; ((\$ 3) (\a 0) (\a 6) (\a 7) (\a 8) (\a 9) (\b 10) (\b 11) (\c 5) (\d 2) (\r 1) (\r 4))
-
-;; (bwt-find-index (bwt-encode (text-prep text)) "ra")
-;; (0 8)
-
-;; (bwt-search (bwt-encode (text-prep text)) "ra")
-
-;; (9 2)
