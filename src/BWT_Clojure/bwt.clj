@@ -7,6 +7,8 @@
 
 (defn bwt-encode [s]
   (map last (sort (map #(apply str %) (take (count s) (partition (count s) 1 (cycle s)))))))
+(defn bwt-encode-p [s]
+  (pmap last (sort (pmap #(apply str %) (take (count s) (partition (count s) 1 (cycle s)))))))
 
 (defn sa [s]
   (sort #(compare (first %1) (first %2)) (map list s (iterate inc 0))))
@@ -19,6 +21,8 @@
         (conj result (first (nth sl n)))
                 (recur (conj result (first (nth sl n))) (last (nth sl n)))))))
 
+;; LF-mapping (maybe...)
+;; need huge heap size(insufficient memory)
 (defn bwt-find-index [bwt query]
   (map last (first (let [arr (sa bwt)]
                      (loop [f arr

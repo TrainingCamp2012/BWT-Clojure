@@ -33,3 +33,8 @@ one another.")
   (do
     (def iliad1000 (slurp "/Users/yag_ays/dev/TrainingCamp2012/iliad.1000.txt"))
     (println (bwt-search (bwt-encode (text-prep iliad1000)) "it"))))
+
+(time (bwt-encode (text-prep iliad100)))
+(time (bwt-encode-p (text-prep iliad100)))
+
+(= (bwt-encode (text-prep iliad100)) (bwt-encode-p (text-prep iliad100)))
